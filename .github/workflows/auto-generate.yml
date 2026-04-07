@@ -1,19 +1,16 @@
-name: Auto Generate
+name: Codeledge Auto Generate
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Trigger with Job Token
-        run: |
-          echo "Triggered!"
-        env:
-          JOB_TOKEN: ${{ secrets.CODELEDGE }}
+      - uses: codeledge/generate-docs@v1
+        with:
+          job-token: ${{ secrets.CODELEDGE_JOB_TOKEN }}
