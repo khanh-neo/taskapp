@@ -15,7 +15,7 @@ jobs:
           CODELEDGE_JOB_TOKEN: ${{ secrets.CODELEDGE_JOB_TOKEN }}
         run: |
           branch_name=${GITHUB_REF#refs/heads/}
-          url="https://api.codeledge.jp/repos/${GITHUB_REPOSITORY}/branches/${branch_name}/update"
+          url="https://api.dev.codeledge.jp/repos/${GITHUB_REPOSITORY}/branches/${branch_name}/update"
 
           http_status_code=$(curl -s -o /dev/null -w "%{http_code}" \
             -X PUT \
