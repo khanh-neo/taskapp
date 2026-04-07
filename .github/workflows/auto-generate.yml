@@ -8,15 +8,12 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.MY_JOB_TOKEN }}
 
-      - name: Run auto generation
+      - name: Trigger with Job Token
         run: |
-          echo "🚀 Auto generation triggered!"
-          echo "Commit: ${{ github.sha }}"
-          echo "Branch: ${{ github.ref_name }}"
+          echo "Triggered!"
+        env:
+          JOB_TOKEN: ${{ secrets.CODELEDGE }}
