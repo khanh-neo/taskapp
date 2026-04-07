@@ -1,4 +1,4 @@
-name: Codeledge Auto Generate
+name: Codeledge ドキュメント生成
 
 on:
   push:
@@ -6,11 +6,27 @@ on:
       - main
 
 jobs:
-  generate:
+  generate_document:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Codeledge ドキュメント生成 API 呼び出し
+        shell: bash
+        env:
+          CODELEDGE_JOB_TOKEN: ${{ secrets.CODELEDGE_JOB_TOKEN }}
+        run: |
+          branch_name=${GITHUB_REF#refs/heads/}
+          url="https://api.codeledge.jp/repos/${GITHUB_REPOSITORY}/branches/${branch_name}/update"
 
-      - uses: codeledge/generate-docs@v1
-        with:
-          job-token: ${{ secrets.CODELEDGE_JOB_TOKEN }}
+          http_status_code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X PUT \
+            -H "X-Access-Token: ${CODELEDGE_JOB_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            "${url}")
+
+          if [ "$http_status_code" -ge 200 ] && [ "$http_status_code" -lt 400 ]; then
+            echo "Success: status code ${http_status_code}"
+          else
+            echo "Error: status code ${http_status_code}"
+            exit 1
+          fi
