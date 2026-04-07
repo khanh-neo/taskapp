@@ -1,0 +1,22 @@
+name: Auto Generate
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.MY_JOB_TOKEN }}
+
+      - name: Run auto generation
+        run: |
+          echo "🚀 Auto generation triggered!"
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref_name }}"
